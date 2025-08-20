@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class GestorDeTareas {
+public class GestorDeTareasAvanzado {
 
     private static final Scanner sc = new Scanner(System.in);
     private static final ArrayList<Tarea> listaTareas = new ArrayList<>();
@@ -28,8 +28,6 @@ public class GestorDeTareas {
             }
         } while (opcion != 6);
 
-        sc.close();
-
     }
 
     public static void mostrarMenu() {
@@ -45,7 +43,7 @@ public class GestorDeTareas {
 
     private static void agregarTarea() {
         System.out.print("ID de la tarea: ");
-        String id = sc.nextLine();
+        var id = sc.nextLine(); // var local
 
         if (mapaTareas.containsKey(id)){
             System.out.println("Ya existe una tarea con ese ID.");
@@ -53,17 +51,17 @@ public class GestorDeTareas {
         }
 
         System.out.print("Nombre de la tarea: ");
-        String nombre = sc.nextLine();
+        var nombre = sc.nextLine(); // var local
 
         System.out.print("Prioridad (1 a 5): ");
-        int prioridad = Integer.parseInt(sc.nextLine());
+        var prioridad = Integer.parseInt(sc.nextLine()); // var local
 
         if (prioridad < 1 || prioridad > 5) {
             System.out.println("Prioridad no válida.");
             return;
         }
 
-        Tarea nueva = new Tarea(nombre, prioridad);
+        var nueva = new Tarea(nombre, prioridad); // var local
         listaTareas.add(nueva);
         mapaTareas.put(id, nueva);
         acumuladorPrioridades += prioridad;
@@ -79,17 +77,19 @@ public class GestorDeTareas {
         }
 
         System.out.println("\n=== Tareas Registradas ===");
-        for (Map.Entry<String, Tarea> entrada : mapaTareas.entrySet()) {
-            System.out.print("ID: " + entrada.getKey() + " - ");
-            entrada.getValue().ejecutar(); // Polimorfismo
-        }
+
+        // lambda + forEach
+        mapaTareas.forEach((id, tarea) -> {
+            System.out.print("ID: " + id + " - ");
+            tarea.ejecutar();
+        });
     }
 
     private static void buscarTarea() {
         System.out.print("Ingresá el ID de la tarea a buscar: ");
-        String id = sc.nextLine();
+        var id = sc.nextLine(); // var local
 
-        Tarea t = mapaTareas.get(id);
+        var t = mapaTareas.get(id); // var local
         if (t != null) {
             System.out.println("Tarea encontrada: ");
             t.ejecutar();
@@ -100,9 +100,9 @@ public class GestorDeTareas {
 
     private static void eliminarTarea() {
         System.out.print("Ingresá el ID de la tarea a eliminar: ");
-        String id = sc.nextLine();
+        var id = sc.nextLine(); // var local
 
-        Tarea eliminada = mapaTareas.remove(id);
+        var eliminada = mapaTareas.remove(id); // var local
         if (eliminada != null) {
             listaTareas.remove(eliminada);
             acumuladorPrioridades -= eliminada.getPrioridad();
